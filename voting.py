@@ -18,9 +18,12 @@
 # crontab -e
 #        add this line:
 #        */30 * * * * python3 /voting/voting.py
-#
+# ##########################
+# LAST STEP:
 # add the list of public identifiers in /voting/randompubids.txt ( 1 line = 1 public identifier )
-# nano /voting/randompubids.txt
+# the list by chase s can be added with:
+# wget https://raw.githubusercontent.com/nyzo-voting-repo/v01/master/randompubids.txt
+# chmod +x randompubids.txt
 
 import requests
 from bs4 import BeautifulSoup
