@@ -35,6 +35,7 @@ def delete_yellow_red(page_content, candidate, lines):
     x_candidate = candidate[:4]
     y_candidate = candidate[63:]
     z_candidate = (x_candidate + '.' + y_candidate).rstrip()
+    loc = 0
     loc = page_content.find(z_candidate)
     try:
         loc = loc + 34
