@@ -17,7 +17,7 @@
 # ##########################
 # crontab -e
 #        add this line:
-#        */30 * * * * /voting/voting.py
+#        */30 * * * * python3 /voting/voting.py
 #
 # add the list of public identifiers in /voting/randompubids.txt ( 1 line = 1 public identifier )
 # nano /voting/randompubids.txt
