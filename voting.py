@@ -95,7 +95,5 @@ with open('randompubids.txt') as file:
             # if this process runs too much there will be no problem, it will keep voting until it has joined the
             # cycle
 
-            # this assumes that the blockchain blacklisting has priority over manual votes
-            # if that is not the case, a non-functioning node could halt the queue
-            # in that case, the public identifier can be manually removed from randompubids.txt
+
 
