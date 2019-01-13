@@ -13,11 +13,10 @@
 # ##########################
 # =====> ADD YOUR PRIVATE KEYS IN TST.SH, MAKE SURE YOUR NYZOVERIFIER PATH IS CORRECT AS WELL!
 # ##########################
-# >>>>>>>>> tst.sh is important, this will not work otherwise <<<<<<<<<<<<
-# ##########################
 # crontab -e
 #        add this line:
 #        */30 * * * * python3 /voting/voting.py
+#
 # ##########################
 # LAST STEP:
 # add the list of public identifiers in /voting/randompubids.txt ( 1 line = 1 public identifier )
@@ -30,6 +29,28 @@ from bs4 import BeautifulSoup
 import re
 import datetime
 import subprocess
+
+
+def delete_yellow_red(page_content, candidate, lines):
+    x_candidate = candidate[:4]
+    y_candidate = candidate[63:]
+    z_candidate = (x_candidate + '.' + y_candidate).rstrip()
+    loc = page_content.find(z_candidate)
+    try:
+        loc = loc + 34
+    except:
+        print("Something went wrong. Check the data in your randompubids.txt file. Can't find"
+              " " + candidate + " on mesh page.")
+        quit()
+    style = page_content[loc:loc+5]
+    if style == 'color':
+        x = open('randompubids.txt', "w")
+        for line in lines:
+            if line != candidate:
+                x.write(line)
+        x.close()
+        print('Removed ' + candidate + ' due to a bad state of the verifier')
+
 
 now = datetime.datetime.now()
 now = now.strftime("%Y-%m-%d-%H-%M")
@@ -52,6 +73,12 @@ for link in soup.findAll('a'):
     pub_id = pre_url[11:]
     cycle_ids.append(pub_id)
 
+f = open('randompubids.txt', "r")
+lines = f.readlines()
+f.close()
+for candidate in lines:
+    delete_yellow_red(page_decoded, candidate, lines)
+
 with open('randompubids.txt') as file:
     for candidate in file:
         short1_candidate = candidate[:4]
@@ -70,3 +97,4 @@ with open('randompubids.txt') as file:
             # this assumes that the blockchain blacklisting has priority over manual votes
             # if that is not the case, a non-functioning node could halt the queue
             # in that case, the public identifier can be manually removed from randompubids.txt
+
