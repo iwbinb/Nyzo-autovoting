@@ -47,7 +47,7 @@ def delete_yellow_red(page_content, candidate, lines):
     if style == 'color':
         x = open('randompubids.txt', "w")
         for line in lines:
-            if line != candidate:
+            if line.rstrip() != candidate.rstrip():
                 x.write(line)
         x.close()
         print('Removed ' + candidate + ' due to a bad state of the verifier')
