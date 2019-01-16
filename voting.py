@@ -15,7 +15,7 @@
 # ##########################
 # crontab -e
 #        add this line:
-#        */30 * * * * /usr/bin/python3 /voting/voting.py
+#        0,14,32,43,51 * * * * cd /voting/; /usr/bin/python3 /voting/voting.py >> /voting/job.log 2>&1
 #
 # ##########################
 # LAST STEP:
