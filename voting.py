@@ -44,7 +44,7 @@ def delete_yellow_red(page_content, candidate, lines):
             x = open('randompubids.txt', "w")
             for line in lines:
                 if line.rstrip() != candidate.rstrip():
-                x.write(line)
+                    x.write(line)
             x.close()
     except:
         print("Removing. Can't find"
@@ -108,6 +108,4 @@ with open('randompubids.txt') as file:
             # we have voted, crontab takes over from here to assure this script runs every xx minutes
             # if this process runs too much there will be no problem, it will keep voting until it has joined the
             # cycle
-
-
-
+            
