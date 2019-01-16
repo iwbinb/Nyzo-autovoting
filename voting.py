@@ -38,7 +38,14 @@ def delete_yellow_red(page_content, candidate, lines):
     loc = 0
     loc = page_content.find(z_candidate)
     try:
-        loc = loc + 34
+        if loc > 0:
+            loc = loc + 34
+        else:
+            x = open('randompubids.txt', "w")
+            for line in lines:
+                if line.rstrip() != candidate.rstrip():
+                x.write(line)
+            x.close()
     except:
         print("Removing. Can't find"
               " " + candidate + " on mesh page.")
