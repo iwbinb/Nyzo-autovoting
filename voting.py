@@ -40,17 +40,24 @@ def delete_yellow_red(page_content, candidate, lines):
     try:
         loc = loc + 34
     except:
-        print("Something went wrong. Check the data in your randompubids.txt file. Can't find"
+        print("Removing. Can't find"
               " " + candidate + " on mesh page.")
-        quit()
-    style = page_content[loc:loc+5]
-    if style == 'color':
         x = open('randompubids.txt', "w")
         for line in lines:
             if line.rstrip() != candidate.rstrip():
                 x.write(line)
         x.close()
-        print('Removed ' + candidate + ' due to a bad state of the verifier')
+    try:
+        style = page_content[loc:loc+5]
+        if style == 'color':
+            x = open('randompubids.txt', "w")
+            for line in lines:
+                if line.rstrip() != candidate.rstrip():
+                    x.write(line)
+            x.close()
+            print('Removed ' + candidate + ' due to a bad state of the verifier')
+    except:
+        pass
 
 
 now = datetime.datetime.now()
