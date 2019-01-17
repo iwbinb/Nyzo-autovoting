@@ -56,8 +56,8 @@ def delete_yellow_red(page_content, candidate, lines):
         for line in lines:
             if line.rstrip() != candidate.rstrip():
                     x.write(line)
-            x.close()
-            print('Removed ' + candidate + ' due to a bad state of the verifier')
+        x.close()
+        print('Removed ' + candidate + ' due to a bad state of the verifier')
 
 now = datetime.datetime.now()
 now = now.strftime("%Y-%m-%d-%H-%M")
