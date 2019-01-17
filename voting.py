@@ -43,6 +43,8 @@ def delete_yellow_red(page_content, candidate, lines):
         if style == 'color':
             x = open('randompubids.txt', "w")
             for line in lines:
+                print(line.rstrip())
+                print(candidate.rstrip())
                 if line.rstrip() != candidate.rstrip():
                     x.write(line)
             x.close()
@@ -50,6 +52,8 @@ def delete_yellow_red(page_content, candidate, lines):
     else:
         x = open('randompubids.txt', "w")
         for line in lines:
+            print(line.rstrip())
+            print(candidate.rstrip())
             if line.rstrip() != candidate.rstrip():
                 x.write(line)
         x.close()
