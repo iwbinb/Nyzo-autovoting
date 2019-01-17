@@ -1,7 +1,7 @@
 ############################
 # BEFORE RUNNING THIS:
 ############################
-# sudo apt-get install python3-bs4
+
 # mkdir /voting/
 # cd /voting/
 # wget https://raw.githubusercontent.com/nyzo-voting-repo/v01/master/voting.py
@@ -35,26 +35,14 @@ def delete_yellow_red(page_content, candidate, lines):
     x_candidate = candidate[:4]
     y_candidate = candidate[63:]
     z_candidate = (x_candidate + '.' + y_candidate).rstrip()
-    loc = 0
     loc = page_content.find(z_candidate)
     try:
-        if loc > 0:
-            loc = loc + 34
-        else:
-            x = open('randompubids.txt', "w")
-            for line in lines:
-                if line.rstrip() != candidate.rstrip():
-                    x.write(line)
-            x.close()
+        loc = loc + 34
     except:
-        print("Removing. Can't find"
+        print("Something went wrong. Check the data in your randompubids.txt file. Can't find"
               " " + candidate + " on mesh page.")
-        x = open('randompubids.txt', "w")
-        for line in lines:
-            if line.rstrip() != candidate.rstrip():
-                x.write(line)
-        x.close()
-    try:
+        quit()
+    if loc > 34:
         style = page_content[loc:loc+5]
         if style == 'color':
             x = open('randompubids.txt', "w")
@@ -63,9 +51,13 @@ def delete_yellow_red(page_content, candidate, lines):
                     x.write(line)
             x.close()
             print('Removed ' + candidate + ' due to a bad state of the verifier')
-    except:
-        pass
-
+    else:
+        x = open('randompubids.txt', "w")
+        for line in lines:
+            if line.rstrip() != candidate.rstrip():
+                    x.write(line)
+            x.close()
+            print('Removed ' + candidate + ' due to a bad state of the verifier')
 
 now = datetime.datetime.now()
 now = now.strftime("%Y-%m-%d-%H-%M")
@@ -108,4 +100,6 @@ with open('randompubids.txt') as file:
             # we have voted, crontab takes over from here to assure this script runs every xx minutes
             # if this process runs too much there will be no problem, it will keep voting until it has joined the
             # cycle
-            
+
+
+
