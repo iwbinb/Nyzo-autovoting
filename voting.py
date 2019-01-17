@@ -31,9 +31,9 @@ import datetime
 import subprocess
 
 
-def delete_yellow_red(page_content, candidate, lines):
-    x_candidate = candidate[:4]
-    y_candidate = candidate[63:]
+def delete_yellow_red(page_content, entry):
+    x_candidate = entry[:4]
+    y_candidate = entry[63:]
     z_candidate = (x_candidate + '.' + y_candidate).rstrip()
     loc = 0
     loc = page_content.find(z_candidate)  # invalid = -1
@@ -41,23 +41,11 @@ def delete_yellow_red(page_content, candidate, lines):
         loc = loc + 34  # offset
         style = page_content[loc:loc + 5]
         if style == 'color':
-            x = open('randompubids.txt', "w")
-            for line in lines:
-                print(line.rstrip())
-                print(candidate.rstrip())
-                if line.rstrip() != candidate.rstrip():
-                    x.write(line)
-            x.close()
-            print('Removed ' + candidate + ' due to a bad state of the verifier')
+            return True
+        else:
+            return False
     else:
-        x = open('randompubids.txt', "w")
-        for line in lines:
-            print(line.rstrip())
-            print(candidate.rstrip())
-            if line.rstrip() != candidate.rstrip():
-                x.write(line)
-        x.close()
-        print('Removed ' + candidate + ' due to a bad state of the verifier')
+        return True
 
 now = datetime.datetime.now()
 now = now.strftime("%Y-%m-%d-%H-%M")
@@ -80,26 +68,28 @@ for link in soup.findAll('a'):
     pub_id = pre_url[11:]
     cycle_ids.append(pub_id)
 
-f = open('randompubids.txt', "r")
-lines = f.readlines()
-f.close()
-for candidate in lines:
-    delete_yellow_red(page_decoded, candidate, lines)
+line_list = []
+with open('randompubids.txt', 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        line = line.rstrip()
+        line_list.append(line)
 
-with open('randompubids.txt') as file:
-    for candidate in file:
-        short1_candidate = candidate[:4]
-        short2_candidate = candidate[63:]
-        short_candidate = (short1_candidate + '.' + short2_candidate).rstrip()
-        if short_candidate in cycle_ids:
-            print(short_candidate, 'was found in the cycle. Going to the next candidate.')
-            continue
-        else:
-            subprocess.check_call(['/voting/tst.sh', str(candidate)])
-            quit()
-            # we have voted, crontab takes over from here to assure this script runs every xx minutes
-            # if this process runs too much there will be no problem, it will keep voting until it has joined the
-            # cycle
+for entry in line_list:
+    if delete_yellow_red(page_decoded, entry) is True:
+        line_list.remove(entry)
+        print('Removed ' + entry + ' from line_list')
 
+with open('randompubids.txt', 'w') as file:
+    for entry in line_list:
+        file.write(entry + '\n')
 
-
+for entry in line_list:
+    short1_candidate = entry[:4]
+    short2_candidate = entry[63:]
+    short_candidate = (short1_candidate + '.' + short2_candidate).rstrip()
+    if short_candidate in cycle_ids:
+        print(short_candidate, 'was found in the cycle. Going to the next candidate.')
+    else:
+        subprocess.check_call(['/voting/tst.sh', str(entry)])
+        quit()
