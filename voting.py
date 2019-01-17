@@ -1,7 +1,7 @@
 ############################
 # BEFORE RUNNING THIS:
 ############################
-
+# sudo apt-get install python3-bs4
 # mkdir /voting/
 # cd /voting/
 # wget https://raw.githubusercontent.com/nyzo-voting-repo/v01/master/voting.py
