@@ -36,14 +36,16 @@ def delete_yellow_red(page_content, entry):
     y_candidate = entry[63:]
     z_candidate = (x_candidate + '.' + y_candidate).rstrip()
     loc = 0
-    loc = page_content.rfind(z_candidate)  # invalid = -1
+    loc = page_content.find(z_candidate)  # invalid = -1
     if loc > 0:
-        loc = loc + 34  # offset
-        style = page_content[loc:loc + 5]
-        if style == 'color':
+        for deep_list in queue_ids:
+            if deep_list[0] == z_candidate:
+                print('found z_candidate in deep_list')
+                if deep_list[1] == 'color':
+                    print('found color')
+                    return True
+                return False
             return True
-        else:
-            return False
     else:
         return True
 
@@ -61,12 +63,26 @@ start_position = page_decoded.find(start_pos_filter)
 end_position = page_decoded.find(end_pos_filter)
 cycle_page = str(page_decoded[start_position: end_position])
 
+start_pos_filter = 'italic;">Verifiers waiting'
+end_pos_filter = '</div></div></div><div style="overflow: scroll;" id="whitePaperContent"'
+start_position = page_decoded.find(start_pos_filter)
+end_position = page_decoded.find(end_pos_filter)
+queue_page = str(page_decoded[start_position: end_position])
+
 soup = BeautifulSoup(cycle_page, "lxml")
 cycle_ids = []
 for link in soup.findAll('a'):
     pre_url = link.get('href')
     pub_id = pre_url[11:]
     cycle_ids.append(pub_id)
+
+soup = BeautifulSoup(queue_page, "lxml")
+queue_ids = []
+for link in soup.findAll('a'):
+    pre_url = link.get('href')
+    style = link.get('style')
+    pub_id = pre_url[11:]
+    queue_ids.append([pub_id, style])
 
 line_list = []
 with open('randompubids.txt', 'r') as file:
