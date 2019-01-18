@@ -26,32 +26,8 @@
 
 import requests
 from bs4 import BeautifulSoup
-import re
-import datetime
 import subprocess
 
-
-def delete_yellow_red(page_content, entry):
-    x_candidate = entry[:4]
-    y_candidate = entry[63:]
-    z_candidate = (x_candidate + '.' + y_candidate).rstrip()
-    loc = 0
-    loc = page_content.find(z_candidate)  # invalid = -1
-    if loc > 0:
-        for deep_list in queue_ids:
-            if deep_list[0] == z_candidate:
-                print('found z_candidate in deep_list')
-                if deep_list[1] == 'color':
-                    print('found color')
-                    return True
-                return False
-            return True
-    else:
-        return True
-
-now = datetime.datetime.now()
-now = now.strftime("%Y-%m-%d-%H-%M")
-pattern = re.compile('[\W_]+')
 mesh_url = 'http://nyzo.co/mesh'
 
 start_pos_filter = 'italic;">Current cycle:'
@@ -64,7 +40,7 @@ end_position = page_decoded.find(end_pos_filter)
 cycle_page = str(page_decoded[start_position: end_position])
 
 start_pos_filter = 'italic;">Verifiers waiting'
-end_pos_filter = '</div></div></div><div style="overflow: scroll;" id="whitePaperContent"'
+end_pos_filter = 'catch (error) { } }, 1000);</script></body></html>'
 start_position = page_decoded.find(start_pos_filter)
 end_position = page_decoded.find(end_pos_filter)
 queue_page = str(page_decoded[start_position: end_position])
@@ -82,7 +58,10 @@ for link in soup.findAll('a'):
     pre_url = link.get('href')
     style = link.get('style')
     pub_id = pre_url[11:]
-    queue_ids.append([pub_id, style])
+    if style is None or len(style) < 1:
+        queue_ids.append(pub_id)
+    else:
+        print('skipped adding ' + pub_id + ' due to ' + style)
 
 line_list = []
 with open('randompubids.txt', 'r') as file:
@@ -91,21 +70,25 @@ with open('randompubids.txt', 'r') as file:
         line = line.rstrip()
         line_list.append(line)
 
-for entry in line_list:
-    if delete_yellow_red(page_decoded, entry) is True:
-        line_list.remove(entry)
-        print('Removed ' + entry + ' from line_list')
-
-with open('randompubids.txt', 'w') as file:
+for x in cycle_ids:
     for entry in line_list:
-        file.write(entry + '\n')
+        short1_candidate = entry[:4]
+        short2_candidate = entry[63:]
+        short_candidate = (short1_candidate + '.' + short2_candidate).rstrip()
+        if short_candidate in x:
+            line_list.remove(entry)
+            print(short_candidate, 'was found in the cycle. Removed from line_list. Going to the next candidate.')
 
 for entry in line_list:
     short1_candidate = entry[:4]
     short2_candidate = entry[63:]
     short_candidate = (short1_candidate + '.' + short2_candidate).rstrip()
-    if short_candidate in cycle_ids:
-        print(short_candidate, 'was found in the cycle. Going to the next candidate.')
-    else:
+    if short_candidate in queue_ids:
+        print('Rewriting randompubids.txt sans in_cycle nodes')
+        with open('randompubids.txt', 'w') as file:
+            print(len(line_list))
+            for x in line_list:
+                file.write(x + '\n')
         subprocess.check_call(['/voting/tst.sh', str(entry)])
         quit()
+
