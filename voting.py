@@ -36,7 +36,7 @@ def delete_yellow_red(page_content, entry):
     y_candidate = entry[63:]
     z_candidate = (x_candidate + '.' + y_candidate).rstrip()
     loc = 0
-    loc = page_content.find(z_candidate)  # invalid = -1
+    loc = page_content.rfind(z_candidate)  # invalid = -1
     if loc > 0:
         loc = loc + 34  # offset
         style = page_content[loc:loc + 5]
