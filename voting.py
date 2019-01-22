@@ -32,7 +32,7 @@ import ast
 
 mesh_url = 'http://nyzo.co/mesh'
 
-in_x_blocks_end = 'blocks)</h3></div></div><div id="meshSection1">'
+in_x_blocks_end = ')</h3></div></div><div id="meshSection1">'
 start_pos_filter = 'italic;">Current cycle:'
 end_pos_filter = '.cycle-event a:link { text-decoration: none; } .cycle-event a:hover { text-decoration:'
 
