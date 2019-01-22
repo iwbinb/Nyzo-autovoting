@@ -46,8 +46,8 @@ in_x_blocks_end_position = page_decoded.find(in_x_blocks_end)
 in_x_blocks_start_position = in_x_blocks_end_position - 40
 in_x_blocks_blob = str(page_decoded[in_x_blocks_start_position:in_x_blocks_end_position])
 in_x_blocks_blob_list = in_x_blocks_blob.split()
-new_node_in_blocks = int(in_x_blocks_blob_list[-1])
-new_node_past_height = int(in_x_blocks_blob_list[-3])
+new_node_in_blocks = int(in_x_blocks_blob_list[-2])
+new_node_past_height = int(in_x_blocks_blob_list[-4])
 
 start_pos_filter = 'italic;">Verifiers waiting'
 end_pos_filter = 'catch (error) { } }, 1000);</script></body></html>'
