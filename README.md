@@ -1,1 +1,1 @@
-# v01
+# Nyzo Manual Autovoting
