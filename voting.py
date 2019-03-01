@@ -107,7 +107,6 @@ else:
         prev_voted = None
         prev_vote_state = None
 
-
 def new_node_in_blocks_critical():
     if new_node_in_blocks > 1:
         return False
